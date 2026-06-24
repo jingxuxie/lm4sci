@@ -43,7 +43,7 @@ Language models are moving from scientific assistants to research operators: the
 
 \section{Introduction}
 
-The language-model-for-science community is approaching a transition point. Early uses of language models in science emphasized text: summarizing papers, drafting code, extracting entities, or answering domain questions. The current frontier increasingly emphasizes \emph{agency}: systems that connect models to literature databases, code interpreters, simulation engines, robotic laboratories, theorem provers, molecule design tools, and manuscript generators. Language models can assist with idea generation, experiment execution, automated ML engineering, literature synthesis, data analysis, and even end-to-end research pipelines \citep{lm4sci2026cfp}. Recent systems illustrate the direction. Chemistry agents combine LLM planning with external chemical tools \citep{bran2023chemcrow}; autonomous chemistry systems have demonstrated planning and execution of experimental workflows \citep{boiko2023emergent}; systems such as \textsc{AI Scientist} automate the loop from ideas to experiments to papers \citep{lu2024aiscientist,yamada2025aiscientistv2}; biological and materials models such as AlphaFold and GNoME have shown how learned systems can reshape entire scientific subfields \citep{jumper2021alphafold,abramson2024alphafold3,merchant2023materials}. These examples do not imply that machines have replaced scientists. They do imply that the unit of analysis is changing from a model answering a prompt to an agent participating in a research institution.
+The language-model-for-science community is approaching a transition point. Early uses of language models in science emphasized text: summarizing papers, drafting code, extracting entities, or answering domain questions. The current frontier increasingly emphasizes \emph{agency}: systems that connect models to literature databases, code interpreters, simulation engines, robotic laboratories, theorem provers, molecule design tools, and manuscript generators. Language models can assist with idea generation, experiment execution, automated ML engineering, literature synthesis, data analysis, and even end-to-end research pipelines. Recent systems illustrate the direction. Chemistry agents combine LLM planning with external chemical tools \citep{bran2023chemcrow}; autonomous chemistry systems have demonstrated planning and execution of experimental workflows \citep{boiko2023emergent}; systems such as \textsc{AI Scientist} automate the loop from ideas to experiments to papers \citep{lu2024aiscientist,yamada2025aiscientistv2}; biological and materials models such as AlphaFold and GNoME have shown how learned systems can reshape entire scientific subfields \citep{jumper2021alphafold,abramson2024alphafold3,merchant2023materials}. These examples do not imply that machines have replaced scientists. They do imply that the unit of analysis is changing from a model answering a prompt to an agent participating in a research institution.
 
 This paper takes a position: \emph{scientific AI systems should be governed as accountable research infrastructure, not merely evaluated as language models}. The distinction matters. A language model can be wrong in a chat window; a scientific agent can select a bad hypothesis, run a misleading experiment, contaminate a benchmark, overuse scarce compute, trigger unsafe laboratory actions, or flood peer review with plausible but low-value manuscripts. In each case, the harm is not only a mistaken output. It is a distortion of the process by which a community decides what is true.
 
@@ -51,7 +51,13 @@ The current safety vocabulary is not wrong, but it is incomplete. Model cards, d
 
 We therefore propose \position{} as a design and evaluation principle. Acceleration is desirable when it increases the rate at which communities produce reliable, useful, and responsibly governed knowledge. Acceleration is not desirable when it merely increases the rate of plausible artifacts, unreviewable claims, unsafe experiments, or unequal concentration of scientific power. Our concrete proposal is a \safetycase{}: a structured, evidence-backed argument that a scientific agent is acceptably safe and epistemically reliable for a specified deployment context. Safety cases are common in safety-critical engineering and are increasingly proposed for AI systems \citep{habli2025big}. We adapt the idea to the distinctive risks of scientific discovery.
 
-\paragraph{Contributions.} This position paper makes four contributions. First, we introduce a ladder of scientific agency that clarifies how risk scales from drafting assistance to institutional discovery systems. Second, we identify five deployment risks for scientific AI: epistemic pollution, tool-mediated harm, responsibility laundering, inequitable concentration, and incentive distortion. Third, we propose a \safetycase{} framework with auditable claims about capability boundaries, tool containment, provenance, human accountability, and societal impact. Fourth, we outline a research agenda for LM4Sci: benchmarks and governance artifacts that measure not only whether agents can do science, but whether their science remains trustworthy.
+\paragraph{Contributions.} This position paper makes four contributions:
+\begin{itemize}
+  \item We introduce a ladder of scientific agency that clarifies how risk scales from drafting assistance to institutional discovery systems.
+  \item We identify five deployment risks for scientific AI: epistemic pollution, tool-mediated harm, responsibility laundering, inequitable concentration, and incentive distortion.
+  \item We propose a \safetycase{} framework with auditable claims about capability boundaries, tool containment, provenance, human accountability, and societal impact.
+  \item We outline a research agenda for LM4Sci: benchmarks and governance artifacts that measure not only whether agents can do science, but whether their science remains trustworthy.
+\end{itemize}
 
 \section{The Scientific Agency Gap}
 
@@ -62,9 +68,11 @@ Table~\ref{tab:ladder} presents a ladder of scientific agency. The levels are no
 \begin{table*}[t]
 \centering
 \small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.3}
 \caption{A ladder of scientific agency. Risk increases not only with model capability but with autonomy, tool access, and institutional impact.}
 \label{tab:ladder}
-\begin{tabularx}{\textwidth}{@{}p{0.10\textwidth}p{0.24\textwidth}p{0.30\textwidth}X@{}}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.2\textwidth}>{\raggedright\arraybackslash}p{0.20\textwidth}>{\raggedright\arraybackslash}p{0.29\textwidth}>{\raggedright\arraybackslash}X@{}}
 \toprule
 Level & Role & Typical action & Governance condition \\
 \midrule
@@ -96,7 +104,7 @@ The harm is asymmetric. A false claim can be produced cheaply but may require ex
 
 Scientific agents differ from general chatbots because they often connect to tools that change the world. In computational settings, an agent may launch expensive jobs, scrape restricted data, or modify code repositories. In biological, chemical, or materials settings, an agent may design molecules, optimize protocols, suggest synthesis routes, or interact with robotic labs. Work on chemistry agents demonstrates the promise of tool-augmented systems \citep{bran2023chemcrow,boiko2023emergent}; the same architecture raises the stakes of misuse, accident, and inappropriate generalization.
 
-Dual-use concerns are not limited to malicious users. A well-intentioned agent can create harm through specification errors, out-of-distribution reasoning, missing tacit knowledge, or over-optimization of a proxy. For example, a biological agent optimized to maximize novelty might search toward hazardous capabilities unless constrained by expert screening. A materials agent might suggest experiments that are chemically unsafe under real laboratory conditions. A code agent might generate insecure pipelines for handling sensitive biomedical data. The International Scientific Report on advanced AI safety emphasizes misuse, malfunction, controllability, and systemic risks for general-purpose AI \citep{bengio2024international}; scientific agents make these concerns concrete by tying models to domain-specific tools.
+Dual-use concerns are not limited to malicious users. A well-intentioned agent can create harm through specification errors, out-of-distribution reasoning, missing tacit knowledge, or over-optimization of a proxy. For example, a biological agent optimized to maximize novelty might search toward hazardous capabilities unless constrained by expert screening. A materials agent might suggest experiments that are chemically unsafe under real laboratory conditions. A code agent might generate insecure pipelines for handling sensitive biomedical data. \citep{bengio2024international} emphasizes misuse, malfunction, controllability, and systemic risks for general-purpose AI ; scientific agents make these concerns concrete by tying models to domain-specific tools.
 
 \subsection{Responsibility laundering}
 
@@ -137,9 +145,11 @@ A safety case is a structured argument, supported by evidence, that a system is 
 \begin{table*}[t]
 \centering
 \small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.3}
 \caption{A proposed \safetycase{} structure for autonomous research agents. Each claim should be backed by evidence, assumptions, and known defeaters.}
 \label{tab:safetycase}
-\begin{tabularx}{\textwidth}{@{}p{0.19\textwidth}p{0.37\textwidth}X@{}}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.24\textwidth}>{\raggedright\arraybackslash}p{0.38\textwidth}>{\raggedright\arraybackslash}X@{}}
 \toprule
 Safety-case claim & Required evidence & Example defeaters \\
 \midrule
@@ -183,11 +193,11 @@ The LM4Sci community can shape norms before autonomous research agents become or
 
 \paragraph{Evaluate workflows, not only answers.} A system that reaches a correct answer through untrustworthy steps may be unsafe to deploy. Evaluation should include process traces, tool-call audits, failed-run analysis, and human oversight burden. For research agents, a benchmark should ask not only whether the final paper looks plausible, but whether the experiments were meaningful, the claims supported, the code reproducible, and the negative results preserved.
 
-\paragraph{Require AI-use and provenance statements for agentic submissions.} COLM submission instructions already require disclosure when LLMs originate ideas, write original content, generate data or plots, or perform evaluation \citep{colm2026instructions}. LM4Sci should go further for agentic work: submissions should disclose what parts of the research loop were automated, what tools the system could access, what human gates existed, and how citations and empirical claims were verified.
+\paragraph{Require AI-use and provenance statements for agentic submissions.} Currently many conference submission instructions already require disclosure when LLMs originate ideas, write original content, generate data or plots, or perform evaluation. LM4Sci should go further for agentic work: submissions should disclose what parts of the research loop were automated, what tools the system could access, what human gates existed, and how citations and empirical claims were verified.
 
 \paragraph{Protect peer review from automated volume.} Workshops should welcome work on automated discovery while resisting incentives that reward paper factories. Possible safeguards include mandatory citation validation, reproducibility checklists, limits on fully automated submissions without human-authored critical analysis, reviewer-facing provenance summaries, and explicit rejection criteria for unverified generated content. The goal is not to ban AI-authored drafts; it is to prevent review capacity from becoming the bottleneck that low-quality automation exploits.
 
-\paragraph{Reward negative results and safety failures.} Scientific-agent papers should be encouraged to report unsafe behaviors, failed hypotheses, misleading experiments, and oversight breakdowns. These are not embarrassing side notes; they are core evidence for responsible deployment. A workshop on language models for science is an ideal venue for normalizing failure reports before the field becomes too performance-centric.
+\paragraph{Reward negative results and safety failures.} Scientific-agent papers should be encouraged to report unsafe behaviors, failed hypotheses, misleading experiments, and oversight breakdowns. These are not embarrassing side notes; they are core evidence for responsible deployment.
 
 \section{A Research Agenda for LM4Sci}
 
@@ -201,7 +211,6 @@ We close with open problems that are technical enough for research papers and in
 
 \paragraph{Dual-use evaluation with domain experts.} Scientific AI safety cannot be solved by generic LLM red teaming alone. Biology, chemistry, materials science, cybersecurity, and medicine require domain-specific threat models. The community should develop controlled evaluation protocols that involve experts without broadly disseminating dangerous details.
 
-\paragraph{Governance of the scientific commons.} Scientific AI depends on public literature, open-source code, shared databases, and peer review. The community should study reciprocal obligations: when systems train on or retrieve from the commons, what should they return? Possible answers include verified metadata, replication artifacts, negative-result repositories, open evaluation logs, and funding for shared infrastructure.
 
 \paragraph{Norms for AI participation in authorship and credit.} AI systems should not be listed as accountable authors, but their contributions should not be hidden. We need norms that distinguish editing, analysis, hypothesis generation, experiment selection, and manuscript drafting. Such norms should protect early-career scientists from both unfair suspicion and unfair displacement.
 
@@ -209,13 +218,6 @@ We close with open problems that are technical enough for research papers and in
 
 The most important question for scientific AI is not whether autonomous agents can produce papers. They can, and their capabilities will improve. The question is whether they can participate in science without eroding the conditions that make science trustworthy. A field that optimizes only for speed may discover more artifacts while knowing less. A field that treats scientific agents as accountable infrastructure can instead pursue \position{}: faster discovery with stronger provenance, clearer responsibility, safer tool use, and fairer access.
 
-LM4Sci is well positioned to define this agenda. Its community sits at the intersection of language modeling, scientific practice, evaluation, and human-AI collaboration. The workshop should therefore ask every proposed system a simple set of questions: What decisions does the agent make? What tools can it use? What evidence supports its claims? Who is accountable? What happens when it fails? These questions should not be seen as obstacles to discovery. They are the infrastructure that will allow discovery to accelerate without losing public trust.
-
-\section*{Ethics Statement}
-This paper argues for stronger governance of scientific AI systems and does not introduce a new model, dataset, or experimental capability. The main ethical risk of the paper is misuse of the framing as compliance theater: organizations might produce superficial safety cases without changing deployment behavior. To reduce that risk, we emphasize evidence-backed claims, known defeaters, independent review for high-risk domains, and incident response. We also note that safety controls can be misused to centralize power or restrict beneficial open science; therefore governance should include access, equity, and public-interest considerations.
-
-\section*{Disclosure of LLM Assistance}
-A language model was used to assist with drafting and editing this position-paper text. The submitting authors are responsible for verifying all claims, references, and policy statements before submission. This disclosure is included because COLM guidance requires disclosure when LLMs are used to write original paper content.
 
 \bibliography{lm4sci_references}
 \bibliographystyle{colm2026_conference}
